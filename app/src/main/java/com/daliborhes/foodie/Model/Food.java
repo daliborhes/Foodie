@@ -11,11 +11,12 @@ public class Food {
     private String price;
     private String discount;
     private String menuId;
+    private String foodId;
 
     public Food() {
     }
 
-    public Food(String name, String image, String description, String price, String discount, String menuId) {
+    public Food(String name, String image, String description, String price, String discount, String menuId, String foodId) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -70,5 +71,13 @@ public class Food {
 
     public void setMenuId(String menuId) {
         this.menuId = menuId;
+    }
+
+    public String getFoodId() {
+        return foodId;
+    }
+
+    public void setFoodId(String foodId) {
+        this.foodId = foodId;
     }
 }

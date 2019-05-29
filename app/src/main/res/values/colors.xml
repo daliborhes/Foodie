@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#2199D5</color>
+    <color name="colorPrimaryDark">#1E355e</color>
     <color name="colorAccent">#39796b</color>
 
     <color name="colorBlueLight">#2199D5</color>
@@ -9,5 +9,7 @@
 
     <color name="overlayBackground">#7f333639</color>
     <color name="overlayActionBar">#0e0d0e</color>
+
+    <color name="yellowTxt">#FFE600</color>
 
 </resources>

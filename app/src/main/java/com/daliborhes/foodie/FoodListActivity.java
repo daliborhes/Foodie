@@ -30,7 +30,6 @@ public class FoodListActivity extends AppCompatActivity {
     RecyclerView recyclerFood;
     List<Food> foodList = new ArrayList<>();
     RecyclerFoodAdapter adapter;
-    private String categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +39,10 @@ public class FoodListActivity extends AppCompatActivity {
         recyclerFood = findViewById(R.id.recycler_food);
         recyclerFood.setHasFixedSize(true);
         recyclerFood.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerFoodAdapter(FoodListActivity.this, foodList);
-        recyclerFood.setAdapter(adapter);
 
         // Get intent here
         if (getIntent() != null) {
-            categoryId = getIntent().getStringExtra("CategoryId");
+            String categoryId = getIntent().getStringExtra("CategoryId");
             Log.d("CategoryID foodactivity", " " + categoryId);
             loadListFood(categoryId);
         }
@@ -63,6 +60,8 @@ public class FoodListActivity extends AppCompatActivity {
                         Food food = snapshot.getValue(Food.class);
                         foodList.add(food);
                     }
+                    adapter = new RecyclerFoodAdapter(FoodListActivity.this, foodList);
+                    recyclerFood.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
             }

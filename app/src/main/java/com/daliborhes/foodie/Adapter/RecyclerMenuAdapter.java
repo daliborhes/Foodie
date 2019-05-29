@@ -2,30 +2,29 @@ package com.daliborhes.foodie.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.daliborhes.foodie.EnteringActivity;
 import com.daliborhes.foodie.FoodListActivity;
-import com.daliborhes.foodie.HomeActivity;
-import com.daliborhes.foodie.LoginActivity;
 import com.daliborhes.foodie.Model.Category;
 import com.daliborhes.foodie.R;
-import com.daliborhes.foodie.SignupActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 /**
  * Created by Dalibor J. Stanković on 21.05.2019.
@@ -34,11 +33,12 @@ import butterknife.ButterKnife;
 public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapter.ViewHolder> {
 
     private Context context;
-    private List<Category> categories;
+    private List<Category> categoryList;
+    private String categoryId;
 
     public RecyclerMenuAdapter(Context context, List<Category> categories) {
         this.context = context;
-        this.categories = categories;
+        this.categoryList = categories;
     }
 
     @Override
@@ -50,14 +50,14 @@ public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        Picasso.get().load(categories.get(position).getImage()).into(holder.categoryImage);
-        holder.categoryName.setText(categories.get(position).getName());
+        Picasso.get().load(categoryList.get(position).getImage()).into(holder.categoryImage);
+        holder.categoryName.setText(categoryList.get(position).getName());
 
     }
 
     @Override
     public int getItemCount() {
-        return categories.size();
+        return categoryList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -78,13 +78,24 @@ public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapte
 
         @Override
         public void onClick(View v) {
+//            DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("Category");
+//            categoryRef.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    Category category = dataSnapshot.getValue(Category.class);
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
+
             Intent intent = new Intent(context, FoodListActivity.class);
-//            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-//            String categoryId = databaseReference.push().getKey();
-//            Log.d("CategoryId from adapter", " " + categoryId);
-//            intent.putExtra("CategoryId", categoryId);
+            categoryId = categoryList.get(getAdapterPosition()).getCategoryId();
+            intent.putExtra("CategoryId", categoryId);
             context.startActivity(intent);
-            Toast.makeText(context, "You Clicked: " + categories.get(getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
         }
     }
 }
