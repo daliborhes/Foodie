@@ -6,40 +6,30 @@ package com.daliborhes.foodie.Model;
 
 public class Category {
 
-    private String Name;
-    private String Image;
-    private String CategoryId;
+    private String name;
+    private String image;
 
     public Category() {
     }
 
-    public Category(String name, String image, String categoryId) {
-        Name = name;
-        Image = image;
-        CategoryId = categoryId;
+    public Category(String name, String image) {
+        this.name = name;
+        this.image = image;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getImage() {
-        return Image;
+        return image;
     }
 
     public void setImage(String image) {
-        Image = image;
-    }
-
-    public String getCategoryId() {
-        return CategoryId;
-    }
-
-    public void setCategoryId(String categoryId) {
-        CategoryId = categoryId;
+        this.image = image;
     }
 }

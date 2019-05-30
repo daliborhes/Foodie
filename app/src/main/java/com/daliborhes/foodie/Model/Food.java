@@ -10,19 +10,18 @@ public class Food {
     private String description;
     private String price;
     private String discount;
-    private String menuId;
-    private String foodId;
+    private String categoryID;
 
     public Food() {
     }
 
-    public Food(String name, String image, String description, String price, String discount, String menuId, String foodId) {
+    public Food(String name, String image, String description, String price, String discount, String categoryID) {
         this.name = name;
         this.image = image;
         this.description = description;
         this.price = price;
         this.discount = discount;
-        this.menuId = menuId;
+        this.categoryID = categoryID;
     }
 
     public String getName() {
@@ -65,19 +64,4 @@ public class Food {
         this.discount = discount;
     }
 
-    public String getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(String menuId) {
-        this.menuId = menuId;
-    }
-
-    public String getFoodId() {
-        return foodId;
-    }
-
-    public void setFoodId(String foodId) {
-        this.foodId = foodId;
-    }
 }

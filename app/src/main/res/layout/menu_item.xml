@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/menu_name"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="48dp"
             android:layout_alignBottom="@+id/menu_image"
             android:background="@color/overlayBackground"
             android:gravity="center"

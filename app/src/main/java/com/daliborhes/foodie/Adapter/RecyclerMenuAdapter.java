@@ -4,13 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.daliborhes.foodie.FoodListActivity;
+import com.daliborhes.foodie.Activities.FoodListActivity;
 import com.daliborhes.foodie.Model.Category;
 import com.daliborhes.foodie.R;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -78,12 +80,21 @@ public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapte
 
         @Override
         public void onClick(View v) {
-//            DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("Category");
+//            final DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("Category");
+//            final List<Category> retrievedCategories = new ArrayList<>();
+//            categoryId = categoryRef.push().getKey();
+//
 //            categoryRef.addValueEventListener(new ValueEventListener() {
 //                @Override
 //                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    Category category = dataSnapshot.getValue(Category.class);
-//
+//                    if (dataSnapshot.exists()) {
+//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                            Category category = snapshot.getValue(Category.class);
+//                            retrievedCategories.add(category);
+//                            categoryId = retrievedCategories.get(0).getName();
+//                        }
+//                        Log.d("Category objects", "onDataChange: " + retrievedCategories);
+//                    }
 //                }
 //
 //                @Override
@@ -92,8 +103,11 @@ public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapte
 //                }
 //            });
 
+            // TODO: Retrieve CategoryID so i can pass it to FoodListActivity and compare
+
             Intent intent = new Intent(context, FoodListActivity.class);
-            categoryId = categoryList.get(getAdapterPosition()).getCategoryId();
+            categoryId = "01";
+            Log.d("CategoryID", "onClick: " + categoryId);
             intent.putExtra("CategoryId", categoryId);
             context.startActivity(intent);
         }

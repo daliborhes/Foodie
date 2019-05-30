@@ -1,4 +1,4 @@
-package com.daliborhes.foodie;
+package com.daliborhes.foodie.Activities;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.daliborhes.foodie.Model.Food;
+import com.daliborhes.foodie.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,7 +49,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
-        // Get intent here
+        // Get intent here (FoodlistID)
         if (getIntent() != null) {
             String foodIdPass = getIntent().getStringExtra("FoodId");
             Log.d("FoodID foodactivity", " " + foodIdPass);

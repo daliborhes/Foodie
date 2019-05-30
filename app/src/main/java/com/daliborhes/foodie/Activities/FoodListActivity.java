@@ -1,4 +1,4 @@
-package com.daliborhes.foodie;
+package com.daliborhes.foodie.Activities;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +9,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.daliborhes.foodie.Adapter.RecyclerFoodAdapter;
-import com.daliborhes.foodie.Adapter.RecyclerMenuAdapter;
-import com.daliborhes.foodie.Model.Category;
 import com.daliborhes.foodie.Model.Food;
+import com.daliborhes.foodie.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +39,7 @@ public class FoodListActivity extends AppCompatActivity {
         recyclerFood.setHasFixedSize(true);
         recyclerFood.setLayoutManager(new LinearLayoutManager(this));
 
-        // Get intent here
+        // Get intent here (CategoryID)
         if (getIntent() != null) {
             String categoryId = getIntent().getStringExtra("CategoryId");
             Log.d("CategoryID foodactivity", " " + categoryId);
@@ -51,7 +50,7 @@ public class FoodListActivity extends AppCompatActivity {
     private void loadListFood(String categoryIdFood) {
 
         databaseReference = database.getReference("Food");
-        Query query = database.getReference("Food").orderByChild("menuId").equalTo(categoryIdFood);
+        Query query = database.getReference("Food").orderByChild("categoryID").equalTo(categoryIdFood);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -1,4 +1,4 @@
-package com.daliborhes.foodie;
+package com.daliborhes.foodie.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.daliborhes.foodie.Adapter.RecyclerMenuAdapter;
 import com.daliborhes.foodie.Model.Category;
+import com.daliborhes.foodie.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,14 +40,15 @@ public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference databaseReference = database.getReference();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    DatabaseReference databaseReference = database.getReference();
 
     TextView fullNameTxt;
     @BindView(R.id.recycler_menu)
     RecyclerView recyclerMenu;
     List<Category> categoryList = new ArrayList<>();
     RecyclerMenuAdapter adapter;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +82,31 @@ public class HomeActivity extends AppCompatActivity
         // Set name for user
         View headerView = navigationView.getHeaderView(0);
         fullNameTxt = headerView.findViewById(R.id.user_name_text);
-        fullNameTxt.setText(mAuth.getCurrentUser().getEmail());
+        userId = mAuth.getCurrentUser().getUid();
+        DatabaseReference userReference = database.getReference().child("User");
+        userReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String userName = dataSnapshot.child(userId).child("name").getValue(String.class);
+                fullNameTxt.setText(userName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         // Load menu
         recyclerMenu.setHasFixedSize(true);
         recyclerMenu.setLayoutManager(new GridLayoutManager(this, 2));
 
         // info from DB
+        loadMenu();
+
+    }
+
+    private void loadMenu() {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -100,7 +121,6 @@ public class HomeActivity extends AppCompatActivity
                             }
                             adapter = new RecyclerMenuAdapter(HomeActivity.this, categoryList);
                             recyclerMenu.setAdapter(adapter);
-
                         }
 
                         @Override
@@ -118,7 +138,6 @@ public class HomeActivity extends AppCompatActivity
 
             }
         });
-
     }
 
     @Override

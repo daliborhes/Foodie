@@ -2,8 +2,6 @@ package com.daliborhes.foodie.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
-import com.daliborhes.foodie.FoodDetailActivity;
-import com.daliborhes.foodie.FoodListActivity;
+import com.daliborhes.foodie.Activities.FoodDetailActivity;
 import com.daliborhes.foodie.Model.Food;
 import com.daliborhes.foodie.R;
 import com.squareup.picasso.Picasso;
@@ -73,8 +69,10 @@ public class RecyclerFoodAdapter extends RecyclerView.Adapter<RecyclerFoodAdapte
 
         @Override
         public void onClick(View v) {
+            // TODO: Retrieve FoodlistID so i can pass it to Fooddetail and compare
+
             Intent intent = new Intent(context, FoodDetailActivity.class);
-            foodId = foodList.get(getAdapterPosition()).getFoodId();
+            foodId = "01";
             intent.putExtra("FoodId", foodId);
             context.startActivity(intent);
             Toast.makeText(context, "You clicked: " + foodList.get(getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
