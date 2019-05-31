@@ -1,10 +1,10 @@
 package com.daliborhes.foodie.Activities;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -24,50 +25,59 @@ import butterknife.ButterKnife;
 
 public class FoodDetailActivity extends AppCompatActivity {
 
+    @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.btn_cart)
     FloatingActionButton fab;
+    @BindView(R.id.food_price)
     TextView foodPrice;
+    @BindView(R.id.food_description)
     TextView foodDesc;
+    @BindView(R.id.number_btn)
     ElegantNumberButton foodBtn;
+    @BindView(R.id.img_food_detail)
     ImageView foodImage;
 
-    DatabaseReference foodRef = FirebaseDatabase.getInstance().getReference("Food");
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_detail);
+        ButterKnife.bind(this);
 
-        // Init views
-        foodImage = findViewById(R.id.img_food_detail);
-        foodDesc = findViewById(R.id.food_description);
-        foodPrice = findViewById(R.id.food_price);
-        fab = findViewById(R.id.btn_cart);
-        foodBtn = findViewById(R.id.number_btn);
-
-        collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
         // Get intent here (FoodlistID)
         if (getIntent() != null) {
-            String foodIdPass = getIntent().getStringExtra("FoodId");
-            Log.d("FoodID foodactivity", " " + foodIdPass);
-            loadFoodDetail(foodIdPass);
+            String foodId = getIntent().getStringExtra("FoodName");
+            Log.d("FoodName foodDetail ", " " + foodId);
+            loadFoodDetail(foodId);
         }
     }
 
     private void loadFoodDetail(String foodId) {
-        foodRef.child(foodId).addValueEventListener(new ValueEventListener() {
+
+        databaseReference = database.getReference("Food");
+        Query query = databaseReference.orderByChild("name").equalTo(foodId);
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Food food = dataSnapshot.getValue(Food.class);
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    Food food = snapshot.getValue(Food.class);
 
-                // Set views
-                Picasso.get().load(food.getImage()).into(foodImage);
-                collapsingToolbarLayout.setTitle(food.getName());
-                foodPrice.setText(food.getPrice());
-                foodDesc.setText(food.getDescription());
+                    // Set views
+                    Picasso.get().load(food.getImage()).into(foodImage);
+                    collapsingToolbarLayout.setTitle(food.getName());
+                    foodPrice.setText(food.getPrice());
+                    foodDesc.setText(food.getDescription());
+                    Log.d("Name", "onDataChange: " + food.getName() + "Price: " + food.getPrice());
+
+                }
+
+
             }
 
             @Override

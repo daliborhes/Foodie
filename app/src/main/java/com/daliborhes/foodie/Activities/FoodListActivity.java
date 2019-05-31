@@ -23,7 +23,7 @@ import java.util.List;
 
 public class FoodListActivity extends AppCompatActivity {
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    FirebaseDatabase database;
     DatabaseReference databaseReference;
 
     RecyclerView recyclerFood;
@@ -35,6 +35,9 @@ public class FoodListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_list);
 
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference();
+
         recyclerFood = findViewById(R.id.recycler_food);
         recyclerFood.setHasFixedSize(true);
         recyclerFood.setLayoutManager(new LinearLayoutManager(this));
@@ -42,7 +45,7 @@ public class FoodListActivity extends AppCompatActivity {
         // Get intent here (CategoryID)
         if (getIntent() != null) {
             String categoryId = getIntent().getStringExtra("CategoryId");
-            Log.d("CategoryID foodactivity", " " + categoryId);
+            Log.d("CategoryID food", " " + categoryId);
             loadListFood(categoryId);
         }
     }
@@ -50,7 +53,7 @@ public class FoodListActivity extends AppCompatActivity {
     private void loadListFood(String categoryIdFood) {
 
         databaseReference = database.getReference("Food");
-        Query query = database.getReference("Food").orderByChild("categoryID").equalTo(categoryIdFood);
+        Query query = databaseReference.orderByChild("categoryID").equalTo(categoryIdFood);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

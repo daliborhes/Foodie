@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +44,7 @@ public class HomeActivity extends AppCompatActivity
     TextView fullNameTxt;
     @BindView(R.id.recycler_menu)
     RecyclerView recyclerMenu;
-    List<Category> categoryList = new ArrayList<>();
+    ArrayList<Category> categoryList = new ArrayList<>();
     RecyclerMenuAdapter adapter;
     private String userId;
 
@@ -55,9 +53,6 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-
-//        fullNameTxt = findViewById(R.id.user_name_text);
-//        fullNameTxt.setText("Proba");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
@@ -83,6 +78,18 @@ public class HomeActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         fullNameTxt = headerView.findViewById(R.id.user_name_text);
         userId = mAuth.getCurrentUser().getUid();
+        displayUserName();
+
+        // Load menu
+        recyclerMenu.setHasFixedSize(true);
+        recyclerMenu.setLayoutManager(new GridLayoutManager(this, 2));
+
+        // info from DB
+        loadMenu();
+
+    }
+
+    private void displayUserName() {
         DatabaseReference userReference = database.getReference().child("User");
         userReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,14 +103,6 @@ public class HomeActivity extends AppCompatActivity
 
             }
         });
-
-        // Load menu
-        recyclerMenu.setHasFixedSize(true);
-        recyclerMenu.setLayoutManager(new GridLayoutManager(this, 2));
-
-        // info from DB
-        loadMenu();
-
     }
 
     private void loadMenu() {
@@ -115,7 +114,7 @@ public class HomeActivity extends AppCompatActivity
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 Category category = snapshot.getValue(Category.class);
                                 categoryList.add(category);
                             }
@@ -159,7 +158,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
 
         return super.onOptionsItemSelected(item);
     }

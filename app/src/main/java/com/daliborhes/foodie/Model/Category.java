@@ -9,6 +9,7 @@ public class Category {
     private String name;
     private String image;
 
+
     public Category() {
     }
 
@@ -32,4 +33,5 @@ public class Category {
     public void setImage(String image) {
         this.image = image;
     }
+
 }

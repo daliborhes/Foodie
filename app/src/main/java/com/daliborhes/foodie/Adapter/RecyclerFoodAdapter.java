@@ -3,6 +3,7 @@ package com.daliborhes.foodie.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,6 @@ public class RecyclerFoodAdapter extends RecyclerView.Adapter<RecyclerFoodAdapte
 
     private Context context;
     private List<Food> foodList;
-    private String foodId;
 
     public RecyclerFoodAdapter(Context context, List<Food> foodList) {
         this.context = context;
@@ -69,13 +69,13 @@ public class RecyclerFoodAdapter extends RecyclerView.Adapter<RecyclerFoodAdapte
 
         @Override
         public void onClick(View v) {
-            // TODO: Retrieve FoodlistID so i can pass it to Fooddetail and compare
 
+            String foodName = foodList.get(getAdapterPosition()).getName();
             Intent intent = new Intent(context, FoodDetailActivity.class);
-            foodId = "01";
-            intent.putExtra("FoodId", foodId);
+            intent.putExtra("FoodName", foodName);
+            Log.d("FoodID", "onClick: " + foodName);
             context.startActivity(intent);
-            Toast.makeText(context, "You clicked: " + foodList.get(getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "You clicked: " + foodName, Toast.LENGTH_SHORT).show();
         }
     }
 }

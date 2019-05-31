@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daliborhes.foodie.Activities.FoodListActivity;
 import com.daliborhes.foodie.Model.Category;
@@ -35,10 +36,9 @@ import butterknife.ButterKnife;
 public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapter.ViewHolder> {
 
     private Context context;
-    private List<Category> categoryList;
-    private String categoryId;
+    private ArrayList<Category> categoryList;
 
-    public RecyclerMenuAdapter(Context context, List<Category> categories) {
+    public RecyclerMenuAdapter(Context context, ArrayList<Category> categories) {
         this.context = context;
         this.categoryList = categories;
     }
@@ -80,36 +80,14 @@ public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapte
 
         @Override
         public void onClick(View v) {
-//            final DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("Category");
-//            final List<Category> retrievedCategories = new ArrayList<>();
-//            categoryId = categoryRef.push().getKey();
-//
-//            categoryRef.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    if (dataSnapshot.exists()) {
-//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                            Category category = snapshot.getValue(Category.class);
-//                            retrievedCategories.add(category);
-//                            categoryId = retrievedCategories.get(0).getName();
-//                        }
-//                        Log.d("Category objects", "onDataChange: " + retrievedCategories);
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                }
-//            });
 
-            // TODO: Retrieve CategoryID so i can pass it to FoodListActivity and compare
-
+            String categoryName = categoryList.get(getAdapterPosition()).getName();
             Intent intent = new Intent(context, FoodListActivity.class);
-            categoryId = "01";
-            Log.d("CategoryID", "onClick: " + categoryId);
-            intent.putExtra("CategoryId", categoryId);
+            intent.putExtra("CategoryId", categoryName);
+            Log.d("CategoryID", "onClick: " + categoryName);
             context.startActivity(intent);
+            Toast.makeText(context, "You clicked: " + categoryName, Toast.LENGTH_SHORT).show();
+
         }
     }
 }

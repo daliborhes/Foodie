@@ -64,4 +64,11 @@ public class Food {
         this.discount = discount;
     }
 
+    public String getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(String categoryID) {
+        this.categoryID = categoryID;
+    }
 }
