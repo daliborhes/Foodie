@@ -10,22 +10,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.FoodDetailActivity"></activity>
-        <activity android:name=".Activities.FoodListActivity" />
+        <activity android:name=".UI.FoodDetailActivity" />
+        <activity android:name=".UI.FoodListActivity" />
         <activity
-            android:name=".Activities.HomeActivity"
+            android:name=".UI.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.SignupActivity" />
-        <activity android:name=".Activities.LoginActivity" />
-        <activity android:name=".Activities.SplashActivity">
+        <activity android:name=".UI.SignupActivity" />
+        <activity android:name=".UI.LoginActivity" />
+        <activity android:name=".UI.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.EnteringActivity" />
+        <activity android:name=".UI.EnteringActivity" />
     </application>
 
 </manifest>

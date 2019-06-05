@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daliborhes.foodie.Activities.FoodDetailActivity;
+import com.daliborhes.foodie.UI.FoodDetailActivity;
 import com.daliborhes.foodie.Model.Food;
 import com.daliborhes.foodie.R;
 import com.squareup.picasso.Picasso;
@@ -37,7 +37,7 @@ public class RecyclerFoodAdapter extends RecyclerView.Adapter<RecyclerFoodAdapte
 
     @Override
     public FoodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.food_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.menu_item, parent, false);
         return new FoodViewHolder(view);
     }
 
@@ -55,9 +55,9 @@ public class RecyclerFoodAdapter extends RecyclerView.Adapter<RecyclerFoodAdapte
 
     public class FoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        @BindView(R.id.food_name)
+        @BindView(R.id.menu_name)
         TextView foodName;
-        @BindView(R.id.food_image)
+        @BindView(R.id.menu_image)
         ImageView foodImage;
 
         public FoodViewHolder(View itemView) {
