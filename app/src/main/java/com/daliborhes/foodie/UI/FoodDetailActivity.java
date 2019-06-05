@@ -76,8 +76,6 @@ public class FoodDetailActivity extends AppCompatActivity {
                     Log.d("Name", "onDataChange: " + food.getName() + "Price: " + food.getPrice());
 
                 }
-
-
             }
 
             @Override

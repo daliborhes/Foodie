@@ -79,8 +79,6 @@ public class RecyclerMenuAdapter extends RecyclerView.Adapter<RecyclerMenuAdapte
             intent.putExtra("CategoryId", categoryName);
             Log.d("CategoryID", "onClick: " + categoryName);
             context.startActivity(intent);
-            Toast.makeText(context, "You clicked: " + categoryName, Toast.LENGTH_SHORT).show();
-
         }
     }
 }

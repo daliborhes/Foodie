@@ -75,7 +75,6 @@ public class RecyclerFoodAdapter extends RecyclerView.Adapter<RecyclerFoodAdapte
             intent.putExtra("FoodName", foodName);
             Log.d("FoodID", "onClick: " + foodName);
             context.startActivity(intent);
-            Toast.makeText(context, "You clicked: " + foodName, Toast.LENGTH_SHORT).show();
         }
     }
 }

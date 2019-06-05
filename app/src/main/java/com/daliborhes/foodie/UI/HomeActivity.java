@@ -6,11 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -41,12 +42,14 @@ public class HomeActivity extends AppCompatActivity
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     DatabaseReference databaseReference = database.getReference();
 
-    TextView fullNameTxt;
+    TextView headerNameTxt, headerEmailTxt ;
     @BindView(R.id.recycler_menu)
     RecyclerView recyclerMenu;
     ArrayList<Category> categoryList = new ArrayList<>();
     RecyclerMenuAdapter adapter;
     private String userId;
+    private Toolbar toolbar;
+    private String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
         setSupportActionBar(toolbar);
 
@@ -76,61 +79,25 @@ public class HomeActivity extends AppCompatActivity
 
         // Set name for user
         View headerView = navigationView.getHeaderView(0);
-        fullNameTxt = headerView.findViewById(R.id.user_name_text);
+        headerNameTxt = headerView.findViewById(R.id.user_name_text);
+        headerEmailTxt = headerView.findViewById(R.id.email_header_text);
         displayUserName();
 
-        // Load menu
-        recyclerMenu.setHasFixedSize(true);
-        recyclerMenu.setLayoutManager(new GridLayoutManager(this, 2));
-
-        // info from DB
-        loadMenu();
-
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, new MenuFragment()).commit();
     }
 
     private void displayUserName() {
         userId = mAuth.getCurrentUser().getUid();
-        DatabaseReference userReference = database.getReference().child("User");
+        userEmail = mAuth.getCurrentUser().getEmail();
+        DatabaseReference userReference = database.getReference().child("User").child(userId);
         userReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String userName = dataSnapshot.child(userId).child("name").getValue(String.class);
-                fullNameTxt.setText(userName);
+                String userName = dataSnapshot.child("name").getValue(String.class);
+                headerNameTxt.setText(userName);
+                headerEmailTxt.setText(userEmail);
                 Toast.makeText(HomeActivity.this, "Welcome, " + userName, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void loadMenu() {
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild("Category")) {
-                    databaseReference.child("Category").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                Category category = snapshot.getValue(Category.class);
-                                categoryList.add(category);
-                            }
-                            adapter = new RecyclerMenuAdapter(HomeActivity.this, categoryList);
-                            recyclerMenu.setAdapter(adapter);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(HomeActivity.this, "Something went wrong" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    Toast.makeText(HomeActivity.this, "Category table does not exist!", Toast.LENGTH_SHORT).show();
-                }
             }
 
             @Override
@@ -167,21 +134,37 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        // Handle navigation view item clicks here.
+        Fragment fragment = null;
+
         int id = item.getItemId();
 
-        if (id == R.id.nav_menu) {
-
-        } else if (id == R.id.nav_cart) {
-
-        } else if (id == R.id.nav_orders) {
-
-        } else if (id == R.id.nav_log_out) {
-            mAuth = FirebaseAuth.getInstance();
-            mAuth.signOut();
-            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-            finish();
+        switch (id) {
+            case R.id.nav_menu:
+                fragment = new MenuFragment();
+                toolbar.setTitle("Menu");
+                break;
+            case R.id.nav_cart:
+                fragment = new CartFragment();
+                toolbar.setTitle("Cart");
+                break;
+            case R.id.nav_orders:
+                fragment = new OrdersFragment();
+                toolbar.setTitle("Orders");
+                break;
+            case R.id.nav_log_out:
+                mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                finish();
+                break;
         }
+
+        // replacing the fragment
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+        }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
